@@ -1,4 +1,18 @@
-import { decamelize } from "humps";
+import { camelizeKeys, decamelize } from "humps";
+
+/**
+ * Camelize API response keys, leaving hostname keys unchanged.
+ * Domain names used as object keys (e.g. test-domain.com) must not be converted
+ * to camelCase, or hyphens are stripped (testDomain.com).
+ */
+export function camelizeResponseKeys<T>(payload: T): T {
+	return camelizeKeys(payload as object, (key, convert, options) => {
+		if (key.includes(".")) {
+			return key;
+		}
+		return convert(key, options);
+	}) as T;
+}
 
 /**
  * This will convert a react-table sort object into

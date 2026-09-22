@@ -1,7 +1,8 @@
 import { QueryClient } from "@tanstack/react-query";
-import { camelizeKeys, decamelize, decamelizeKeys } from "humps";
+import { decamelize, decamelizeKeys } from "humps";
 import queryString, { type StringifiableRecord } from "query-string";
 import AuthStore from "src/modules/AuthStore";
+import { camelizeResponseKeys } from "./helpers";
 
 const queryClient = new QueryClient();
 const contentTypeHeader = "Content-Type";
@@ -59,7 +60,7 @@ async function processResponse(response: Response) {
 			typeof payload.error.messageI18n !== "undefined" ? payload.error.messageI18n : payload.error.message,
 		);
 	}
-	return camelizeKeys(payload) as any;
+	return camelizeResponseKeys(payload) as any;
 }
 
 interface GetArgs {
